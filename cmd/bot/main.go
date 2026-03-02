@@ -57,41 +57,51 @@ func main() {
 	client.OnCommand("add", func(m *tg.NewMessage) error {
 		return h.AddCommandHandler(m, botState)
 	}).
-		Filter(tg.IsReply).
-		Filter(tg.Not(tg.IsBot)).
 		Filter(f.NewStateFilter(botState, s.Idle)).
+		Filter(tg.FromUser(int64(cfg.OwnerID))).
+		Filter(tg.Not(tg.IsBot)).
+		Filter(tg.IsReply).
 		Register()
 	client.OnMessage("", func(m *tg.NewMessage) error {
 		return h.AddBookHandler(m, botState)
 	}).
-		Filter(tg.FilterDocument).
 		Filter(tg.FromUser(client.GetPeerID("botbybase_bot"))).
 		Filter(f.NewStateFilter(botState, s.Add)).
+		Filter(tg.FilterDocument).
 		Register()
 	// update - обновление и показ списка книг
 	client.OnCommand("update", func(m *tg.NewMessage) error {
 		return h.UpdateCommandHandler(m, botState)
 	}).
-		Filter(tg.Not(tg.IsBot)).
 		Filter(f.NewStateFilter(botState, s.Idle)).
+		Filter(tg.FromUser(int64(cfg.OwnerID))).
+		Filter(tg.Not(tg.IsBot)).
 		Register()
 	client.OnMessage("", func(m *tg.NewMessage) error {
-		go h.UpdateBookHandler(m, botState)
-		return nil
+		return h.UpdateBookHandler(m, botState)
 	}).
-		Filter(tg.FilterDocument).
 		Filter(tg.FromUser(client.GetPeerID("botbybase_bot"))).
 		Filter(f.NewStateFilter(botState, s.Update)).
+		Filter(tg.FilterDocument).
 		Register()
 	// show - просто показ списка книг
 	client.OnCommand("show", func(m *tg.NewMessage) error {
 		return h.ShowCommandHandler(m, botState)
 	}).
-		Filter(tg.Not(tg.IsBot)).
 		Filter(f.NewStateFilter(botState, s.Idle)).
+		Filter(tg.FromUser(int64(cfg.OwnerID))).
+		Filter(tg.Not(tg.IsBot)).
+		Register()
+	// delete<id> уделение книги
+	client.OnMessage("^/delete\\d+$", func(m *tg.NewMessage) error {
+		return h.DeleteCommandHandler(m, botState)
+	}).
+		Filter(f.NewStateFilter(botState, s.Idle)).
+		Filter(tg.FromUser(int64(cfg.OwnerID))).
+		Filter(tg.Not(tg.IsBot)).
 		Register()
 
-	_, _ = client.SendMessage(client.GetPeerID("bulka_808"), "Ready!")
+	_, _ = client.SendMessage(cfg.OwnerID, "Ready!\n<code>/update</code>\n<code>/show</code>")
 
 	client.Idle()
 }

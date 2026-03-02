@@ -2,9 +2,8 @@ package handler
 
 import (
 	s "GoGramTest/internal/state"
+	"GoGramTest/internal/utils"
 	"log"
-	"strconv"
-	"strings"
 	"time"
 
 	tg "github.com/amarnathcjd/gogram/telegram"
@@ -21,14 +20,14 @@ func AddCommandHandler(m *tg.NewMessage, bs *s.BotState) error {
 
 	// /download123123@botbybase_bot
 	// достаем BookId
-	msg, err := m.GetReplyMessage()
+	replyMsg, err := m.GetReplyMessage()
 	if err != nil {
 		bs.SetState(s.Idle)
 		return err
 	}
-	log.Println(msg.Text())
-	idStr := strings.Split(msg.Text()[9:], "@")[0]
-	bookId, err := strconv.Atoi(idStr)
+	log.Println(replyMsg.Text())
+
+	bookId, err := utils.GetBookIdFromBotMessage(replyMsg)
 	if err != nil {
 		bs.SetState(s.Idle)
 		return err
@@ -39,7 +38,7 @@ func AddCommandHandler(m *tg.NewMessage, bs *s.BotState) error {
 	bs.AddId <- uint(bookId)
 	// отправляем боту сообщение -> AddBookHandler
 	log.Println(bookId)
-	msg, err = m.Client.SendMessage(m.ChatID(), msg.Text())
+	msg, err := m.Client.SendMessage(m.ChatID(), replyMsg.Text())
 	if err != nil {
 		bs.SetState(s.Idle)
 		<-bs.AddId

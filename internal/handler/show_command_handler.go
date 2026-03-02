@@ -9,14 +9,14 @@ import (
 )
 
 func ShowCommandHandler(m *tg.NewMessage, bs *s.BotState) error {
-	books, err := bs.Repo.GetAllBooks()
+	books, err := bs.Repo.GetAll()
 	if err != nil {
 		return err
 	}
 	var result strings.Builder
 	result.WriteString("<i><b>Сохраненные книги:</b></i> " + strconv.Itoa(len(books)) + "\n")
 	for _, book := range books {
-		result.WriteString(book.ToString())
+		result.WriteString(book.Format())
 	}
 
 	_, err = m.Reply(result.String())

@@ -27,7 +27,15 @@ func (bs *BotState) SetState(state int) {
 	bs.mu.Lock()
 	bs.State = state
 	bs.mu.Unlock()
-	log.Println(state)
+	switch state {
+	case 0:
+		log.Println("[BOT STATE] idle")
+	case 1:
+		log.Println("[BOT STATE] add")
+	case 2:
+		log.Println("[BOT STATE] update")
+	}
+
 }
 func (bs *BotState) GetState() int {
 	bs.mu.Lock()

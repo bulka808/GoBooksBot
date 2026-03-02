@@ -19,16 +19,32 @@ type Book struct {
 }
 
 func (b *Book) ToString() string {
-	var builder strings.Builder
-	builder.WriteString("(ID:" + strconv.Itoa(int(b.ID)) + ")")
-	builder.WriteString("\n<i><b>Название:</b></i> ")
-	builder.WriteString(b.Title)
-	builder.WriteString("\n<i><b>Автор:</b></i> ")
-	builder.WriteString(b.Author)
-	builder.WriteString("\n<i><b>Серия:</b></i> ")
-	builder.WriteString(b.Series)
-	builder.WriteString("\n<i><b>Глава:</b></i> ")
-	builder.WriteString(b.Chapter)
-	builder.WriteString("\n\n")
-	return builder.String()
+	var res strings.Builder
+	res.WriteString(strconv.Itoa(int(b.ID)))
+	res.WriteString("\n")
+	res.WriteString(b.Title)
+	res.WriteString("\n")
+	res.WriteString(b.Author)
+	res.WriteString("\n")
+	res.WriteString(b.Series)
+	res.WriteString("\n")
+	res.WriteString(b.Chapter)
+	res.WriteString("\n")
+	return res.String()
+}
+
+func (b *Book) Format() string {
+	var res strings.Builder
+	res.WriteString("(ID:" + strconv.Itoa(int(b.ID)) + ")")
+	res.WriteString("\n<i><b>Название:</b></i> ")
+	res.WriteString(b.Title)
+	res.WriteString("\n<i><b>Автор:</b></i> ")
+	res.WriteString(b.Author)
+	res.WriteString("\n<i><b>Серия:</b></i> ")
+	res.WriteString(b.Series)
+	res.WriteString("\n<i><b>Глава:</b></i> ")
+	res.WriteString(b.Chapter)
+	res.WriteString("\nудалить: <code>/delete" + strconv.Itoa(int(b.ID)) + "</code>")
+	res.WriteString("\n\n")
+	return res.String()
 }

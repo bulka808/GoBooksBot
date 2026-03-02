@@ -8,10 +8,10 @@ import (
 )
 
 type Config struct {
-	ApiId       int
-	ApiHash     string
-	Phone       string
-	BooksChatID int
+	ApiId   int
+	ApiHash string
+	Phone   string
+	OwnerID int
 }
 
 func Load() (*Config, error) {
@@ -22,18 +22,26 @@ func Load() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	apiHash := os.Getenv("API_HASH")
 	if apiHash == "" {
 		return nil, &configError{msg: "API_HASH environment variable not set"}
 	}
+
 	phone := os.Getenv("PHONE")
 	if phone == "" {
 		return nil, &configError{msg: "PHONE environment variable not set"}
 	}
 
+	ownerID, err := strconv.Atoi(os.Getenv("OWNER_ID"))
+	if err != nil {
+		return nil, &configError{msg: "OWNER_ID environment variable not set"}
+	}
+
 	cfg.ApiId = apiId
 	cfg.ApiHash = apiHash
 	cfg.Phone = phone
+	cfg.OwnerID = ownerID
 	return cfg, nil
 }
 

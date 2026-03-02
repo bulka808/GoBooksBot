@@ -29,7 +29,6 @@ func (repo *BookRepository) GetBookByID(id int) (*model.Book, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return book, nil
 }
 func (repo *BookRepository) GetBookByBookID(bookID int) (*model.Book, error) {
@@ -37,7 +36,6 @@ func (repo *BookRepository) GetBookByBookID(bookID int) (*model.Book, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return book, nil
 }
 func (repo *BookRepository) GetAllByTitle(title string) ([]*model.Book, error) {
@@ -45,7 +43,6 @@ func (repo *BookRepository) GetAllByTitle(title string) ([]*model.Book, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return books, nil
 }
 func (repo *BookRepository) GetAllByAuthor(author string) ([]*model.Book, error) {
@@ -53,7 +50,6 @@ func (repo *BookRepository) GetAllByAuthor(author string) ([]*model.Book, error)
 	if err != nil {
 		return nil, err
 	}
-
 	return books, nil
 }
 func (repo *BookRepository) GetAllBySeries(series string) ([]*model.Book, error) {
@@ -61,15 +57,13 @@ func (repo *BookRepository) GetAllBySeries(series string) ([]*model.Book, error)
 	if err != nil {
 		return nil, err
 	}
-
 	return books, nil
 }
-func (repo *BookRepository) GetAllBooks() ([]*model.Book, error) {
+func (repo *BookRepository) GetAll() ([]*model.Book, error) {
 	books, err := gorm.G[*model.Book](repo.db).Find(repo.ctx)
 	if err != nil {
 		return nil, err
 	}
-
 	return books, nil
 }
 
@@ -86,6 +80,19 @@ func (repo *BookRepository) Delete(book *model.Book) (*model.Book, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return book, nil
+}
+func (repo *BookRepository) DeleteById(id int) error {
+	_, err := gorm.G[*model.Book](repo.db).Where("ID = ?", id).Delete(repo.ctx)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (repo *BookRepository) DeleteByBookId(BookID int) error {
+	_, err := gorm.G[*model.Book](repo.db).Where("ID = ?", BookID).Delete(repo.ctx)
+	if err != nil {
+		return err
+	}
+	return nil
 }
