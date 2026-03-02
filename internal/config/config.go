@@ -42,6 +42,7 @@ func Load() (*Config, error) {
 	cfg.ApiHash = apiHash
 	cfg.Phone = phone
 	cfg.OwnerID = ownerID
+
 	return cfg, nil
 }
 
